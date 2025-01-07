@@ -45,10 +45,7 @@ export class Router {
         const server = createServer(async (req, res) => {
             const customRequest = {...req} as ExtendedRequest
 
-            for (const middleware of this.middlewares) {
-                const next = await new Promise((resolve) => middleware(customRequest, res, () => resolve(true)))
-                if (!next) return
-            }
+            // need to implement the resolution for the this.middlewares (like json())
 
             const route = this.routes.find((route) => {
                 return route.method === req.method && route.path.test(req.url);

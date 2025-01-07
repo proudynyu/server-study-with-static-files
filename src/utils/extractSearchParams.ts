@@ -1,5 +1,5 @@
-export function extractSearchParams(query: string) {
-    return query
+export function extractSearchParams(query?: string) {
+    return query && query
     .substring(1)
     .split("&")
     .reduce((queryParams, param) => {
