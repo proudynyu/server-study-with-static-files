@@ -5,7 +5,10 @@
 }
 
 body {
-    width: 100vdw;
-    height: 100vdh;
+    width: 100dvw;
+    height: 100dvh;
     background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
