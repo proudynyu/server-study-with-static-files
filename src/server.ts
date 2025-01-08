@@ -3,6 +3,7 @@ import { Router } from "./lib/router"
 const router = new Router()
 
 router.use(router.json)
+router.use(router.useStatic)
 
 router.get("/", (_req, res) => {
     res.writeHead(200, {

@@ -2,7 +2,9 @@ import { IncomingMessage, ServerResponse } from "node:http"
 
 export type Methods = "GET" | "POST" | "PUT" | "DELETE"
 
-export type Middleware = (req: IncomingMessage, res: ServerResponse<IncomingMessage> & { req: IncomingMessage; }, next?: Middleware) => void
+export type ExtendedResponse = ServerResponse<IncomingMessage> & { req: IncomingMessage; }
+
+export type Middleware = (req: ExtendedRequest, res: ExtendedResponse, next?: Middleware) => void
 
 export type Route = {
     method: string

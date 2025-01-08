@@ -1,12 +1,16 @@
 import path from "node:path";
 import { promises } from "node:fs";
-import { IncomingMessage, ServerResponse } from "node:http";
 
-export async function serveStaticFiles(req: IncomingMessage, res: ServerResponse<IncomingMessage> & { req: IncomingMessage; }) {
+import { ExtendedRequest, ExtendedResponse } from "../dto/routes";
+
+export async function serveStaticFiles(req: ExtendedRequest, res: ExtendedResponse) {
     const url = req.url
     const publicFolder = path.resolve(process.cwd(), "public")
-    const filepath = path.join(publicFolder, url === "/" ? "index.html" : url)
+    const filepath = path.join(publicFolder, url)
+
     const ext = path.extname(filepath)
+    if (!ext) return
+
     const contentType = {
         '.html': 'text/html',
         '.css': 'text/css',

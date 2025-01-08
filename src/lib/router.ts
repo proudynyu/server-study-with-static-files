@@ -1,9 +1,10 @@
 import { createServer } from "node:http"
 
-import { ExtendedRequest, Middleware, Route } from "../dto/routes"
+import { ExtendedRequest, ExtendedResponse, Middleware, Route } from "../dto/routes"
 import { buildRoutePath } from "../utils/buildPath"
 import { extractSearchParams } from "../utils/extractSearchParams"
 import { Logger } from "./logger"
+import { serveStaticFiles } from "./static-files"
 
 export class Router {
     private routes: Route[]
@@ -30,6 +31,10 @@ export class Router {
         this.handle('POST', buildRoutePath(path), handler)
     }
 
+    useStatic(req: ExtendedRequest, res: ExtendedResponse) {
+        serveStaticFiles(req, res)
+    }
+
     async json(req: ExtendedRequest): Promise<void> {
         if (req.method === "POST" || req.method === "PUT") {
             const chuncks = []
@@ -45,7 +50,9 @@ export class Router {
         const server = createServer(async (req, res) => {
             const customRequest = {...req} as ExtendedRequest
 
-            // need to implement the resolution for the this.middlewares (like json())
+            for (const middleware of this.middlewares) {
+                middleware(customRequest, res)
+            }
 
             const route = this.routes.find((route) => {
                 return route.method === req.method && route.path.test(req.url);
