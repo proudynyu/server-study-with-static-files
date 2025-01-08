@@ -2,10 +2,11 @@ import path from "node:path";
 import { promises } from "node:fs";
 
 import { ExtendedRequest, ExtendedResponse } from "../dto/routes";
+import config from "../config"
 
 export async function serveStaticFiles(req: ExtendedRequest, res: ExtendedResponse) {
-    const url = req.url
-    const publicFolder = path.resolve(process.cwd(), "public")
+    const url = req.url ?? ""
+    const publicFolder = path.resolve(process.cwd(), config.CLIENT_FOLDER)
     const filepath = path.join(publicFolder, url)
 
     const ext = path.extname(filepath)
@@ -15,6 +16,8 @@ export async function serveStaticFiles(req: ExtendedRequest, res: ExtendedRespon
         '.html': 'text/html',
         '.css': 'text/css',
         '.js': 'application/javascript',
+        '.mjs': 'application/javascript',
+        '.cjs': 'application/javascript',
         '.json': 'application/json',
         '.png': 'image/png',
         '.jpg': 'image/jpeg',
